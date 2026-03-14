@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>حروف </title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خلية الحروف | لوحة التحكم</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #3498db;
+      --success: #27ae60;
+      --bg: #f4f7f6;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 8px;
+      max-width: 800px;
+      margin: 0 auto 30px;
+    }
+
+    .btn {
+      background: white;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      aspect-ratio: 1;
+    }
+
+    .btn.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 10px auto;
+      text-align: right;
+      border-right: 6px solid var(--primary);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      max-width: 600px;
+    }
+
+    .ans {
+      color: var(--success);
+      font-weight: bold;
+      display: none;
+      margin-top: 10px;
+    }
+
+    .admin-section {
+      margin-top: 50px;
+      padding: 20px;
+      background: #eee;
+      border-radius: 15px;
+      border: 2px dashed #ccc;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      border-radius: 10px;
+      padding: 10px;
+      direction: ltr;
+    }
+
+    .update-btn {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>🐝 خلية الحروف</h1>
+    <p>أهلاً بك يا سيدي في عالم التحدي</p>
+  </div>
+
+  <div class="grid" id="alphabet"></div>
+  <div id="display">
+    <h2>اختر حرفاً لتبدأ</h2>
+  </div>
+
+  <div class="admin-section">
+    <h3>⚙️ لوحة تحكم سيدي (لإضافة الأسئلة)</h3>
+    <p>انسخ الكود اللي أعطيك اياه والصقه هنا:</p>
+    <textarea id="jsonInput" placeholder='{"ح": [{"q": "سؤال", "a": "جواب"}]}'></textarea>
+    <br>
+    <button class="update-btn" onclick="updateData()">تحديث الأسئلة فوراً</button>
+  </div>
+
+  <script>
+    let data = {};
+    // تحميل البيانات القديمة إذا وجدت
+    if (localStorage.getItem('huroofData')) {
+      data = JSON.parse(localStorage.getItem('huroofData'));
+    }
+    const alpha = "أبتثجحخدذرزسشصضطظعغفقكلمنهوي".split("");
+    const grid = document.getElementById('alphabet');
+    alpha.forEach(l => {
+      let b = document.createElement('button');
+      b.className = 'btn';
+      b.innerText = l;
+      b.onclick = () => {
+        document.querySelectorAll('.btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        show(l);
+      };
+      grid.appendChild(b);
+    });
+
+    function show(l) {
+      const display = document.getElementById('display');
+      display.innerHTML = `<h2>حرف (${l})</h2>`;
+      if (!data[l] || data[l].length === 0) {
+        display.innerHTML += "<p>لا توجد أسئلة لهذا الحرف بعد، أضفها من الأسفل يا سيدي.</p>";
+        return;
+      }
+      data[l].forEach((item, i) => {
+        let c = document.createElement('div');
+        c.className = 'card';
+        c.innerHTML = `<div>${i+1}. ${item.q}</div><button onclick="this.nextElementSibling.style.display='block'" style="margin-top:10px; cursor:pointer">كشف الإجابة</button><div class="ans">الإجابة: ${item.a}</div>`;
+        display.appendChild(c);
+      });
+    }
+
+    function updateData() {
+      try {
+        const newData = JSON.parse(document.getElementById('jsonInput').value);
+        data = {
+          ...data,
+          ...newData
+        };
+        localStorage.setItem('huroofData', JSON.stringify(data));
+        alert('تم التحديث بنجاح يا سيدي!');
+        document.getElementById('jsonInput').value = '';
+      } catch (e) {
+        alert('خطأ في تنسيق الكود، تأكد من نسخه بالكامل.');
+      }
+    }
+  </script>
+</body>
+
+</html>
+    
+  </body>
+  
+</html>
